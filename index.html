@@ -6,14 +6,6 @@
     <title>AI 趣味 KOL 合作邀約生成系統</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Gen AI SDK -->
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/genai": "https://esm.run/@google/genai"
-        }
-      }
-    </script>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
@@ -50,11 +42,11 @@
                 <textarea id="brandSummary" rows="4" class="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="請貼上長篇大論的品牌介紹、新聞稿或產品說明，AI 會自動幫你提煉出適合寫進信件的吸睛賣點..."></textarea>
             </div>
 
-            <!-- KOL 資訊與特色手動填寫（因應 IG 限制） -->
+            <!-- KOL 資訊與特色手動填寫 -->
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">KOL 帳號 / 名稱與近期觀察特色</label>
                 <input type="text" id="kolName" placeholder="例如：卡特 / @cat_daily" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm mb-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                <textarea id="kolHighlights" rows="3" class="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="手動輸入 KOL 的特色（例如：近期都在發露營穿搭、限動常搞笑吐槽、說話風格直率幽默、粉絲都叫他小帳精靈...等）"></textarea>
+                <textarea id="kolHighlights" rows="3" class="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="手動輸入 KOL 的特色（例如：近期都在發露營穿搭、限動常搞笑吐槽、說話風格直率幽默等）"></textarea>
             </div>
 
             <!-- 信件風格設定 -->
@@ -103,11 +95,8 @@
         AI KOL Invitation System &copy; 2026. Hosted on GitHub Pages.
     </footer>
 
-    <!-- JavaScript 邏輯與 Gemini API 串接 -->
-    <script type="module">
-        import { GoogleGenAI } from "@google/genai";
-
-        // 初始化 API Key 讀取
+    <!-- JavaScript 邏輯：使用原生 REST API 支援新型態 API Key -->
+    <script>
         window.onload = function() {
             const savedKey = localStorage.getItem('gemini_api_key');
             if (savedKey) {
@@ -115,7 +104,7 @@
             }
         };
 
-        window.saveApiKey = function() {
+        function saveApiKey() {
             const key = document.getElementById('apiKeyInput').value.trim();
             if (key) {
                 localStorage.setItem('gemini_api_key', key);
@@ -124,22 +113,45 @@
                 localStorage.removeItem('gemini_api_key');
                 alert('API Key 已清除');
             }
-        };
+        }
 
-        function getAIClient() {
-            const key = document.getElementById('apiKeyInput').value.trim() || localStorage.getItem('gemini_api_key');
-            if (!key) {
+        function getApiKey() {
+            return document.getElementById('apiKeyInput').value.trim() || localStorage.getItem('gemini_api_key');
+        }
+
+        async function callGeminiAPI(promptText) {
+            const apiKey = getApiKey();
+            if (!apiKey) {
                 alert('請先在右上角輸入並儲存您的 Gemini API Key！');
                 return null;
             }
-            return new GoogleGenAI({ apiKey: key });
+
+            // 使用標準 Gemini 2.5 Flash 終端點
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{ text: promptText }]
+                    }]
+                })
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error?.message || 'API 呼叫失敗，請檢查金鑰是否正確');
+            }
+
+            return data.candidates[0].content.parts[0].text;
         }
 
         // 1. AI 濃縮品牌亮點
-        window.aiRefineBrand = async function() {
-            const ai = getAIClient();
-            if (!ai) return;
-
+        async function aiRefineBrand() {
             const rawSummary = document.getElementById('brandSummary').value.trim();
             if (!rawSummary) {
                 alert('請先在欄位中貼上原始的品牌概要說明！');
@@ -150,24 +162,21 @@
             btn.textContent = '⏳ AI 整理中...';
 
             try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: `請將以下冗長的品牌/產品介紹，萃取並改寫成 2-3 個最具吸引力的「核心亮點與痛點解決」，語氣要精煉吸引人，方便寫信給 KOL 時直接讓對方秒懂：\n\n${rawSummary}`
-                });
-                document.getElementById('brandSummary').value = response.text.trim();
+                const prompt = `請將以下冗長的品牌/產品介紹，萃取並改寫成 2-3 個最具吸引力的「核心亮點與痛點解決」，語氣要精煉吸引人，方便寫信給 KOL 時直接讓對方秒懂：\n\n${rawSummary}`;
+                const resultText = await callGeminiAPI(prompt);
+                if (resultText) {
+                    document.getElementById('brandSummary').value = resultText.trim();
+                }
             } catch (error) {
-                alert('AI 處理失敗，請檢查 API Key 是否正確。');
+                alert('AI 處理失敗：' + error.message);
                 console.error(error);
             } finally {
                 btn.textContent = '🪄 AI 濃縮亮點';
             }
-        };
+        }
 
         // 2. AI 生成趣味且高轉換的邀約信
-        window.aiGenerateEmail = async function() {
-            const ai = getAIClient();
-            if (!ai) return;
-
+        async function aiGenerateEmail() {
             const brandSummary = document.getElementById('brandSummary').value.trim();
             const kolName = document.getElementById('kolName').value.trim() || '創作者';
             const kolHighlights = document.getElementById('kolHighlights').value.trim();
@@ -208,33 +217,29 @@
 `;
 
             try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: prompt
-                });
-
-                const text = response.text.trim();
-                // 解析主旨與內文
-                const parts = text.split('---');
-                if (parts.length >= 2) {
-                    const subjectLine = parts[0].replace('主旨：', '').trim();
-                    const bodyLine = parts[1].trim();
-                    outputSubject.value = subjectLine;
-                    outputBody.value = bodyLine;
-                } else {
-                    outputSubject.value = '【合作邀約】期待與您擦出精彩火花！';
-                    outputBody.value = text;
+                const text = await callGeminiAPI(prompt);
+                if (text) {
+                    const parts = text.split('---');
+                    if (parts.length >= 2) {
+                        const subjectLine = parts[0].replace('主旨：', '').trim();
+                        const bodyLine = parts[1].trim();
+                        outputSubject.value = subjectLine;
+                        outputBody.value = bodyLine;
+                    } else {
+                        outputSubject.value = '【合作邀約】期待與您擦出精彩火花！';
+                        outputBody.value = text.trim();
+                    }
                 }
             } catch (error) {
-                alert('生成失敗，請稍後再試。');
+                alert('生成失敗：' + error.message);
                 console.error(error);
                 outputSubject.value = '';
                 outputBody.value = '';
             }
-        };
+        }
 
         // 一鍵複製
-        window.copyToClipboard = function() {
+        function copyToClipboard() {
             const subject = document.getElementById('outputSubject').value;
             const body = document.getElementById('outputBody').value;
             const fullText = `主旨：${subject}\n\n${body}`;
