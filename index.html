@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 趣味 KOL 合作邀約生成系統</title>
+    <title>KOL 合作邀約信自動生成系統</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -11,63 +11,53 @@
 
     <!-- Navbar -->
     <header class="bg-indigo-600 text-white shadow-md py-4 px-6 mb-6">
-        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold flex items-center gap-2">
-                ✨ AI 趣味 KOL 合作邀約生成系統
+                ✨ KOL 合作邀約信自動生成系統
             </h1>
-            <!-- API Key 設定 -->
-            <div class="flex items-center gap-2 bg-indigo-700 px-3 py-1.5 rounded-lg text-xs">
-                <span>Gemini API Key:</span>
-                <input type="password" id="apiKeyInput" placeholder="請輸入 Gemini API Key" class="bg-indigo-800 text-white px-2 py-1 rounded border border-indigo-500 focus:outline-none w-48">
-                <button onclick="saveApiKey()" class="bg-indigo-500 hover:bg-indigo-400 px-2 py-1 rounded transition">儲存</button>
-            </div>
+            <span class="text-xs bg-indigo-500 px-3 py-1 rounded-full">高轉換趣味版</span>
         </div>
     </header>
 
     <!-- Main Container -->
     <main class="max-w-6xl mx-auto px-4 flex-grow w-full grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         
-        <!-- 左側：輸入表單與 AI 處理區 -->
+        <!-- 左側：輸入表單區 -->
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-5">
-            <h2 class="text-lg font-semibold text-indigo-900 border-b pb-2">1. 填寫與 AI 智慧萃取</h2>
+            <h2 class="text-lg font-semibold text-indigo-900 border-b pb-2">1. 填寫專案與 KOL 資訊</h2>
 
-            <!-- 品牌概要欄位 + AI 改寫 -->
+            <!-- 品牌概要欄位 -->
             <div>
-                <div class="flex justify-between items-center mb-1">
-                    <label class="block text-sm font-medium text-slate-700">原始品牌/產品概要</label>
-                    <button onclick="aiRefineBrand()" class="text-xs bg-purple-100 hover:bg-purple-200 text-purple-700 px-2 py-1 rounded font-medium transition flex items-center gap-1">
-                        🪄 AI 濃縮亮點
-                    </button>
-                </div>
-                <textarea id="brandSummary" rows="4" class="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="請貼上長篇大論的品牌介紹、新聞稿或產品說明，AI 會自動幫你提煉出適合寫進信件的吸睛賣點..."></textarea>
+                <label class="block text-sm font-medium text-slate-700 mb-1">品牌與產品核心亮點</label>
+                <textarea id="brandSummary" rows="4" class="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="請填寫品牌介紹、主打商品、吸引人的合作福利或核心賣點..."></textarea>
             </div>
 
-            <!-- KOL 資訊與特色手動填寫 -->
+            <!-- KOL 資訊與特色 -->
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">KOL 帳號 / 名稱與近期觀察特色</label>
+                <label class="block text-sm font-medium text-slate-700 mb-1">KOL 名稱 / 帳號與近期觀察特色</label>
                 <input type="text" id="kolName" placeholder="例如：卡特 / @cat_daily" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm mb-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                <textarea id="kolHighlights" rows="3" class="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="手動輸入 KOL 的特色（例如：近期都在發露營穿搭、限動常搞笑吐槽、說話風格直率幽默等）"></textarea>
+                <textarea id="kolHighlights" rows="3" class="w-full rounded-lg border border-slate-300 p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" placeholder="輸入 KOL 近期特色（例如：近期都在開箱好物、限動常搞笑吐槽、說話風格直率幽默等）..."></textarea>
             </div>
 
             <!-- 信件風格設定 -->
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">信件調性設定</label>
+                <label class="block text-sm font-medium text-slate-700 mb-1">信件調性風格</label>
                 <select id="toneSelect" class="w-full rounded-lg border border-slate-300 p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    <option value="humorous">幽默好玩、像朋友聊天（推最高回覆率）</option>
-                    <option value="sincere">真誠溫暖、有質感與溫度</option>
-                    <option value="cool">俐落有型、Z 世代潮流感</option>
+                    <option value="humorous">🔥 幽默好玩、像朋友聊天（最高回覆率）</option>
+                    <option value="sincere">✨ 真誠溫暖、有質感與溫度</option>
+                    <option value="cool">😎 俐落有型、Z 世代潮流感</option>
                 </select>
             </div>
 
-            <button onclick="aiGenerateEmail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg shadow transition duration-200 mt-2 flex justify-center items-center gap-2">
-                <span>🚀 AI 產生超吸睛邀約信</span>
+            <button onclick="generateEmail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg shadow transition duration-200 mt-2">
+                🚀 一鍵產生超吸睛邀約信
             </button>
         </div>
 
         <!-- 右側：結果與複製區 -->
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col gap-5">
             <div class="flex justify-between items-center border-b pb-2">
-                <h2 class="text-lg font-semibold text-indigo-900">2. 生成結果預覽</h2>
+                <h2 class="text-lg font-semibold text-indigo-900">2. 生成結果與複製</h2>
                 <button onclick="copyToClipboard()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 transition">
                     📋 一鍵複製全部
                 </button>
@@ -75,14 +65,14 @@
 
             <!-- 郵件主旨 -->
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">主旨 (Subject Line)</label>
+                <label class="block text-sm font-medium text-slate-700 mb-1">建議信件主旨</label>
                 <input type="text" id="outputSubject" readonly class="w-full bg-slate-50 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:outline-none">
             </div>
 
             <!-- 信件內文 -->
             <div class="flex-grow flex flex-col">
-                <label class="block text-sm font-medium text-slate-700 mb-1">信件內文 (Body)</label>
-                <textarea id="outputBody" rows="14" readonly class="w-full flex-grow bg-slate-50 rounded-lg border border-slate-200 p-3 text-sm text-slate-700 focus:outline-none" placeholder="點擊左側按鈕後，AI 產出的趣味邀約信將會顯示在此..."></textarea>
+                <label class="block text-sm font-medium text-slate-700 mb-1">完整邀約信內文</label>
+                <textarea id="outputBody" rows="14" readonly class="w-full flex-grow bg-slate-50 rounded-lg border border-slate-200 p-3 text-sm text-slate-700 focus:outline-none" placeholder="點擊左側「一鍵產生超吸睛邀約信」後，客製化信件將會顯示在此..."></textarea>
             </div>
 
             <p id="copyTip" class="text-xs text-emerald-600 text-right h-4"></p>
@@ -92,167 +82,69 @@
 
     <!-- Footer -->
     <footer class="text-center py-6 text-xs text-slate-400 border-t border-slate-200">
-        AI KOL Invitation System &copy; 2026. Hosted on GitHub Pages.
+        KOL Collaboration Invitation System &copy; 2026. Hosted on GitHub Pages.
     </footer>
 
-    <!-- JavaScript 邏輯：使用原生 REST API 支援新型態 API Key -->
+    <!-- JavaScript 智慧生成邏輯 -->
     <script>
-        window.onload = function() {
-            const savedKey = localStorage.getItem('gemini_api_key');
-            if (savedKey) {
-                document.getElementById('apiKeyInput').value = savedKey;
-            }
-        };
-
-        function saveApiKey() {
-            const key = document.getElementById('apiKeyInput').value.trim();
-            if (key) {
-                localStorage.setItem('gemini_api_key', key);
-                alert('API Key 已儲存至瀏覽器！');
-            } else {
-                localStorage.removeItem('gemini_api_key');
-                alert('API Key 已清除');
-            }
-        }
-
-        function getApiKey() {
-            return document.getElementById('apiKeyInput').value.trim() || localStorage.getItem('gemini_api_key');
-        }
-
-        async function callGeminiAPI(promptText) {
-            const apiKey = getApiKey();
-            if (!apiKey) {
-                alert('請先在右上角輸入並儲存您的 Gemini API Key！');
-                return null;
-            }
-
-            // 使用標準 Gemini 2.5 Flash 終端點
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-            
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{ text: promptText }]
-                    }]
-                })
-            });
-
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.error?.message || 'API 呼叫失敗，請檢查金鑰是否正確');
-            }
-
-            return data.candidates[0].content.parts[0].text;
-        }
-
-        // 1. AI 濃縮品牌亮點
-        async function aiRefineBrand() {
-            const rawSummary = document.getElementById('brandSummary').value.trim();
-            if (!rawSummary) {
-                alert('請先在欄位中貼上原始的品牌概要說明！');
-                return;
-            }
-
-            const btn = event.target;
-            btn.textContent = '⏳ AI 整理中...';
-
-            try {
-                const prompt = `請將以下冗長的品牌/產品介紹，萃取並改寫成 2-3 個最具吸引力的「核心亮點與痛點解決」，語氣要精煉吸引人，方便寫信給 KOL 時直接讓對方秒懂：\n\n${rawSummary}`;
-                const resultText = await callGeminiAPI(prompt);
-                if (resultText) {
-                    document.getElementById('brandSummary').value = resultText.trim();
-                }
-            } catch (error) {
-                alert('AI 處理失敗：' + error.message);
-                console.error(error);
-            } finally {
-                btn.textContent = '🪄 AI 濃縮亮點';
-            }
-        }
-
-        // 2. AI 生成趣味且高轉換的邀約信
-        async function aiGenerateEmail() {
+        function generateEmail() {
             const brandSummary = document.getElementById('brandSummary').value.trim();
             const kolName = document.getElementById('kolName').value.trim() || '創作者';
-            const kolHighlights = document.getElementById('kolHighlights').value.trim();
+            const kolHighlights = document.getElementById('kolHighlights').value.trim() || '近期優質又吸睛的創作內容';
             const tone = document.getElementById('toneSelect').value;
 
             if (!brandSummary) {
-                alert('請填寫品牌概要');
+                alert('請先填寫品牌與產品核心亮點！');
                 return;
             }
 
-            const outputSubject = document.getElementById('outputSubject');
-            const outputBody = document.getElementById('outputBody');
-            outputSubject.value = 'AI 正在構思好玩的信件主旨...';
-            outputBody.value = '請稍候，AI 正在為這位 KOL 量身打造超有吸引力、告別罐頭感的趣味邀約信...';
+            let subject = '';
+            let body = '';
 
-            let toneDesc = '幽默好玩、像朋友聊天、打破傳統公關腔';
-            if (tone === 'sincere') toneDesc = '真誠溫暖、有質感、像粉絲真心推坑';
-            if (tone === 'cool') toneDesc = '俐落有型、酷帥、Z 世代社群風格';
-
-            const prompt = `
-你是一位頂尖的社群行銷專家，擅長寫出打開率極高、完全不像罐頭訊息的 KOL 合作邀約信。
-請根據以下資訊，寫出一封信件的主旨與內文：
-
-- KOL 稱呼：${kolName}
-- KOL 近期特色/觀察：${kolHighlights ? kolHighlights : '優質的日常創作與獨特觀點'}
-- 品牌/產品亮點：${brandSummary}
-- 信件風格調性：${toneDesc}
-
-【寫作核心要求】
-1. **絕對不要官腔**：開場必須自然、精準切中對方的近期特色（證明我們真的有發摟他），讓人覺得「哇，你是真的懂我」。
-2. **有趣好讀**：排版乾淨、段落分明，多用口語或生動比喻，讓創作者在滑手機時一眼就能看懂合作誘因。
-3. **主旨（Subject）**：必須非常吸引人、帶有好奇心或誠意，避免被當成垃圾郵件。
-
-請嚴格依照以下格式回傳（不要有多餘的廢話）：
-主旨：[產出主旨]
----
-[產出內文]
-`;
-
-            try {
-                const text = await callGeminiAPI(prompt);
-                if (text) {
-                    const parts = text.split('---');
-                    if (parts.length >= 2) {
-                        const subjectLine = parts[0].replace('主旨：', '').trim();
-                        const bodyLine = parts[1].trim();
-                        outputSubject.value = subjectLine;
-                        outputBody.value = bodyLine;
-                    } else {
-                        outputSubject.value = '【合作邀約】期待與您擦出精彩火花！';
-                        outputBody.value = text.trim();
-                    }
-                }
-            } catch (error) {
-                alert('生成失敗：' + error.message);
-                console.error(error);
-                outputSubject.value = '';
-                outputBody.value = '';
+            if (tone === 'humorous') {
+                subject = `🔥 [${kolName}] 被你的內容燒到！有個超好玩的新品想邀請你來玩`;
+                body = `${kolName} 你好呀！\n\n` +
+                       `每次滑到你的動態都笑死（或是被燒到體無完膚），特別是注意到你近期在「${kolHighlights}」的表現，真的超有個人特色又吸引人！\n\n` +
+                       `我們最近正忙著推廣一個超讚的項目：\n👉 ${brandSummary}\n\n` +
+                       `真心覺得這個超級適合你的風格，完全不是那種無聊死板的罐頭品牌。想問你有沒有興趣一起合作或搶先體驗看看？\n\n` +
+                       `如果覺得有興趣，隨時回覆我，我們來聊聊怎麼玩最開心！祝今天順心～`;
+            } else if (tone === 'sincere') {
+                subject = `【誠摯邀請】期待與風格獨具的 [${kolName}] 展開深度合作`;
+                body = `${kolName} 您好：\n\n` +
+                       `我是本次專案的品牌行銷團隊代表。我們長期關注您的社群，非常欣賞您一直以來在「${kolHighlights}」所展現的質感與用心。\n\n` +
+                       `我們近期推出的品牌核心亮點為：\n・ ${brandSummary}\n\n` +
+                       `我們深信您的受眾與這項目的理念高度契合，因此誠摯希望邀請您參與本次合作，透過您的視角傳遞美好的體驗給粉絲們。\n\n` +
+                       `若您有興趣進一步了解詳細的合作企劃與福利，歡迎隨時回信與我們聯繫。期待您的佳音！`;
+            } else { // cool
+                subject = `⚡️ [${kolName}] 解鎖新企劃：這個質感好物想找你一起搞點事情`;
+                body = `Hey ${kolName}！\n\n` +
+                       `關注你很久了，特別是看到你最近在「${kolHighlights}」的內容，完全就是走在潮流前端。\n\n` +
+                       `我們最近搞了一個很酷的新專案：\n⚡️ ${brandSummary}\n\n` +
+                       `覺得你的調性跟這個超搭，想問你有沒有興趣接招、一起擦出新火花？\n\n` +
+                       `有興趣的話敲我一下，我們把詳細企劃傳給你瞧瞧！`;
             }
+
+            document.getElementById('outputSubject').value = subject;
+            document.getElementById('outputBody').value = body;
+            document.getElementById('copyTip5') ? document.getElementById('copyTip5').textContent = '' : null;
         }
 
-        // 一鍵複製
         function copyToClipboard() {
             const subject = document.getElementById('outputSubject').value;
             const body = document.getElementById('outputBody').value;
             const fullText = `主旨：${subject}\n\n${body}`;
 
             if (!body) {
-                alert('目前沒有內容可複製');
+                alert('目前沒有內容可複製，請先點擊產生按鈕。');
                 return;
             }
 
             navigator.clipboard.writeText(fullText).then(() => {
                 const tip = document.getElementById('copyTip');
                 tip.textContent = '✓ 內容已成功複製到剪貼簿！';
-                setTimeout(() => tip.textContent = '', 3000);
+                setTimeout(() => {
+                    tip.textContent = '';
+                }, 3000);
             });
         }
     </script>
